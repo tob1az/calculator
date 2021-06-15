@@ -1,4 +1,4 @@
 
-add_executable(calc_test TokenTest.cpp)
+add_executable(calc_test NumberTest.cpp)
 target_link_libraries(calc_test gtest_main calc_logic)
 add_test(NAME calc_test COMMAND calc_test)
