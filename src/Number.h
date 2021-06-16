@@ -4,6 +4,7 @@
 #include <istream>
 #include <optional>
 #include <ostream>
+#include <cctype>
 
 namespace calc::tokens {
 
@@ -16,6 +17,9 @@ struct Number final {
     }
     static std::optional<Number> parseFrom(std::istream& stream) {
         Type value{};
+        if (!isdigit(stream.peek())) {
+            return std::nullopt;
+        }
         if (!(stream >> value)) {
             return std::nullopt;
         }
