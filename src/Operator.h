@@ -8,7 +8,7 @@
 namespace calc::tokens {
 using Precedence = int;
 
-enum class Associativity { LeftToRight, RightToLeft };
+enum class Associativity { LeftToRight, RightToLeft, None };
 
 struct Operator {
     Operator(char symbol, Precedence precedence, Associativity associativity)

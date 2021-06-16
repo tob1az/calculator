@@ -29,23 +29,46 @@ public:
             } else if (auto operatorToken =
                            tokens::Operator::parseFrom(expression);
                        operatorToken) {
-                reorderOperators(*operatorToken, operators, &output);
-                operators.push(*operatorToken);
+                if (!reorderOperators(*operatorToken, operators, &output)) {
+                    return std::nullopt;
+                }
             } else {
                 return std::nullopt;
             }
         }
         while (!operators.empty()) {
-            output.push(operators.top());
+            auto top = operators.top();
+            if (top.symbol == '(') {
+                return std::nullopt;
+            }
+            output.push(top);
             operators.pop();
         }
         return output;
     }
 
 private:
-    void reorderOperators(const tokens::Operator& currentOperator,
+    bool reorderOperators(const tokens::Operator& currentOperator,
                           std::stack<tokens::Operator>& operators,
                           PostfixTokens* destination) const {
+        // handle brackets
+        if (currentOperator.symbol == '(') {
+            operators.push(currentOperator);
+            return true;
+        }
+        if (currentOperator.symbol == ')') {
+            while (!operators.empty()) {
+                auto last = operators.top();
+                operators.pop();
+                if (last.symbol == '(') {
+                    return true;
+                }
+                destination->push(last);
+            }
+            // no (
+            return false;
+        }
+        // handle other operators
         while (!operators.empty()) {
             const auto& last = operators.top();
 
@@ -64,6 +87,8 @@ private:
                 break;
             }
         }
+        operators.push(currentOperator);
+        return true;
     }
 
     std::istringstream _expression;

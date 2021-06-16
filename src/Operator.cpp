@@ -6,12 +6,14 @@
 namespace calc::tokens {
 
 namespace {
-std::array<Operator, 5> kSupportedOperators{
+std::array<Operator, 7> kSupportedOperators{
     Operator{'+', 1, Associativity::LeftToRight},
     Operator{'-', 1, Associativity::LeftToRight},
     Operator{'*', 2, Associativity::LeftToRight},
     Operator{'/', 2, Associativity::LeftToRight},
     Operator{'^', 3, Associativity::RightToLeft},
+    Operator{'(', 0, Associativity::None},
+    Operator{')', 0, Associativity::None},
 };
 }
 

@@ -8,7 +8,7 @@ class OperatorTest : public ::testing::TestWithParam<char> {
 };
 
 INSTANTIATE_TEST_SUITE_P(AllOperators, OperatorTest,
-                         ::testing::Values('+', '-', '*', '/', '^'));
+                         ::testing::Values('+', '-', '*', '/', '^', '(', ')'));
 
 
 TEST_P(OperatorTest, canPrintOperator) {
