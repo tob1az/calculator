@@ -4,11 +4,9 @@
 #include <istream>
 #include <optional>
 #include <ostream>
-#include <variant>
-#include <vector>
 
-namespace calc {
-namespace tokens {
+namespace calc::tokens {
+
 struct Number final {
     using Type = double;
     const Type value;
@@ -24,7 +22,4 @@ struct Number final {
         return Number{value};
     }
 };
-
-}  // namespace tokens
-
-}  // namespace calc
+}  // namespace calc::tokens

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Tokens.h"
+#include "Number.h"
 
 namespace calc::tests {
 
@@ -25,15 +25,16 @@ TEST_F(NumberTest, cannotParseNonNumbers) {
 }
 
 TEST_F(NumberTest, cannotParseIfStreamIsInvalid) {
-    std::stringstream number{};
+    std::stringstream number{"12456"};
+    // parse the number and exhaust the stream
+    tokens::Number::parseFrom(number);
     ASSERT_FALSE(tokens::Number::parseFrom(number));    
 }
 
 TEST_F(NumberTest, canBePrinted) {
-    std::stringstream number{"5554.0"};
     std::stringstream printed;
-    tokens::Number::parseFrom(number)->printTo(printed);
-    ASSERT_EQ(printed.str(), number.str());    
+    tokens::Number{5554.0}.printTo(printed);
+    ASSERT_EQ(printed.str(), "5554.0");    
 }
 
 }  // namespace calc::tests
