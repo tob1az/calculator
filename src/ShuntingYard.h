@@ -6,11 +6,10 @@
 #include <stack>
 #include <string_view>
 
+#include "Expression.h"
 #include "Helpers.h"
-#include "Tokens.h"
 
 namespace calc {
-using PostfixTokens = std::queue<Token>;
 
 // Shunting-yard algorithm
 class ShuntingYard {
@@ -18,12 +17,12 @@ public:
     explicit ShuntingYard(std::string_view expression)
         : _expression{expression.data()} {}
 
-    std::optional<PostfixTokens> tokenize() {
+    std::optional<PostfixExpression> tokenize() {
         std::stack<tokens::Operator> operators;
         std::istringstream expression{_expression.str()};
 
-        PostfixTokens output;
-        while (!expression.eof()) {
+        PostfixExpression output;
+        while (expression.good() && expression.peek() != EOF) {
             if (auto number = tokens::Number::parseFrom(expression); number) {
                 output.push(*number);
             } else if (auto operatorToken =
@@ -50,7 +49,7 @@ public:
 private:
     bool reorderOperators(const tokens::Operator& currentOperator,
                           std::stack<tokens::Operator>& operators,
-                          PostfixTokens* destination) const {
+                          PostfixExpression* destination) const {
         // handle brackets
         if (currentOperator.symbol == '(') {
             operators.push(currentOperator);
