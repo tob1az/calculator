@@ -73,10 +73,10 @@ private:
 
             const bool isOfHigherPrecedence =
                 (currentOperator.associativity ==
-                     tokens::Associativity::RightToLeft &&
+                     tokens::Associativity::LeftToRight &&
                  currentOperator.precedence <= last.precedence) ||
                 (currentOperator.associativity ==
-                     tokens::Associativity::LeftToRight &&
+                     tokens::Associativity::RightToLeft &&
                  currentOperator.precedence < last.precedence);
 
             if (isOfHigherPrecedence) {
