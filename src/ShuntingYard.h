@@ -20,17 +20,20 @@ public:
     std::optional<PostfixExpression> tokenize() {
         std::stack<tokens::Operator> operators;
         std::istringstream expression{_expression.str()};
+        std::optional<Token> previousToken;
 
         PostfixExpression output;
         while (expression.good() && expression.peek() != EOF) {
             if (auto number = tokens::Number::parseFrom(expression); number) {
                 output.push(*number);
-            } else if (auto operatorToken =
-                           tokens::Operator::parseFrom(expression);
+                previousToken.emplace(*number);
+            } else if (auto operatorToken = tokens::Operator::parseFrom(
+                           expression, detectArity(previousToken));
                        operatorToken) {
                 if (!reorderOperators(*operatorToken, operators, &output)) {
                     return std::nullopt;
                 }
+                previousToken.emplace(*operatorToken);
             } else {
                 return std::nullopt;
             }
@@ -88,6 +91,18 @@ private:
         }
         operators.push(currentOperator);
         return true;
+    }
+
+    tokens::Arity detectArity(const std::optional<Token>& previousToken) const {
+        // at the start of expression
+        if (!previousToken) {
+            return tokens::Arity::Unary;
+        }
+        if (std::holds_alternative<tokens::Operator>(*previousToken) &&
+            std::get<tokens::Operator>(*previousToken).symbol != ')') {
+            return tokens::Arity::Unary;
+        }
+        return tokens::Arity::Binary;
     }
 
     std::istringstream _expression;
