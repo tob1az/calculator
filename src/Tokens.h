@@ -1,4 +1,6 @@
 #pragma once
+#include <variant>
+
 #include "Number.h"
 #include "Operator.h"
 
