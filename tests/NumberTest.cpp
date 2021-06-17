@@ -17,7 +17,7 @@ TEST_P(NumberTest, canParseNumbers) {
 INSTANTIATE_TEST_SUITE_P(ValidNumbers, NumberTest,
                          ::testing::Values(std::pair{"100", 100.},
                                            std::pair{"0", 0.},
-                                           std::pair{".55", 0.55}));
+                                           std::pair{"0.55", 0.55}));
 
 TEST_F(NumberTest, cannotParseNonNumbers) {
     std::stringstream number{"sf1"};
