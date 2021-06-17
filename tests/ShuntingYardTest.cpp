@@ -28,4 +28,19 @@ TEST_P(ShuntingYardTest, canTokenizeInfixExpression) {
     ShuntingYard tokenizer{GetParam().input};
     ASSERT_EQ(print(tokenizer.tokenize()), GetParam().output);
 }
+
+TEST_F(ShuntingYardTest, failsIfNoRightBracket) {
+    ShuntingYard tokenizer{"(1+1.4"};
+    ASSERT_FALSE(tokenizer.tokenize());
+}
+
+TEST_F(ShuntingYardTest, failsIfNoLeftBracket) {
+    ShuntingYard tokenizer{"1+1.4)"};
+    ASSERT_FALSE(tokenizer.tokenize());
+}
+
+TEST_F(ShuntingYardTest, failsIfBracketsOrderIsWrong) {
+    ShuntingYard tokenizer{")(1*4"};
+    ASSERT_FALSE(tokenizer.tokenize());
+}
 }  // namespace calc::tests
